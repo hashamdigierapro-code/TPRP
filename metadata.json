@@ -1,0 +1,6 @@
+{
+  "name": "QuizMaster Pro",
+  "description": "A modern quiz app with customizable and AI-generated MCQs, roasts, motivation, and a real-time offline leaderboards dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
