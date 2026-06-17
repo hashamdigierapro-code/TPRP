@@ -121,6 +121,12 @@ interface QuizDao {
     @Query("SELECT * FROM quiz_questions WHERE subject = :subject AND difficulty = :difficulty AND isDeleted = 0 AND isDraft = 0")
     suspend fun getQuestionsForQuiz(subject: String, difficulty: String): List<QuizQuestion>
 
+    @Query("SELECT * FROM quiz_questions WHERE subject = :subject AND isDeleted = 0 AND isDraft = 0")
+    suspend fun getAllQuestionsForSubject(subject: String): List<QuizQuestion>
+
+    @Query("SELECT * FROM quiz_questions WHERE isDeleted = 0 AND isDraft = 0")
+    suspend fun getAllActiveQuestionsList(): List<QuizQuestion>
+
     @Query("SELECT DISTINCT subject FROM quiz_questions WHERE isDeleted = 0 AND isDraft = 0")
     fun getUniqueSubjects(): Flow<List<String>>
 
@@ -202,7 +208,7 @@ interface LeaderboardDao {
 
 @Database(
     entities = [QuizQuestion::class, UserStats::class, HistoryLog::class, LeaderboardPlayer::class, UserProfile::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class QuizDatabase : RoomDatabase() {
@@ -223,7 +229,7 @@ abstract class QuizDatabase : RoomDatabase() {
                     QuizDatabase::class.java,
                     "quizmaster_pro_db2"
                 )
-                .fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigration(dropAllTables = true)
                 .build()
                 INSTANCE = instance
                 instance

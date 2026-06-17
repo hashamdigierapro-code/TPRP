@@ -29,63 +29,63 @@ import kotlin.coroutines.resumeWithException
 
 @JsonClass(generateAdapter = true)
 data class Part(
-    @Json(name = "text") val text: String? = null
+    @field:Json(name = "text") val text: String? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class Content(
-    @Json(name = "parts") val parts: List<Part>
+    @field:Json(name = "parts") val parts: List<Part>
 )
 
 @JsonClass(generateAdapter = true)
 data class ResponseFormatText(
-    @Json(name = "mimeType") val mimeType: String,
-    @Json(name = "schema") val schema: Map<String, Any>? = null
+    @field:Json(name = "mimeType") val mimeType: String,
+    @field:Json(name = "schema") val schema: Map<String, Any>? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class ResponseFormat(
-    @Json(name = "text") val text: ResponseFormatText? = null
+    @field:Json(name = "text") val text: ResponseFormatText? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class GenerationConfig(
-    @Json(name = "responseFormat") val responseFormat: ResponseFormat? = null,
-    @Json(name = "temperature") val temperature: Float? = null
+    @field:Json(name = "responseFormat") val responseFormat: ResponseFormat? = null,
+    @field:Json(name = "temperature") val temperature: Float? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class GeminiRequest(
-    @Json(name = "contents") val contents: List<Content>,
-    @Json(name = "generationConfig") val generationConfig: GenerationConfig? = null,
-    @Json(name = "systemInstruction") val systemInstruction: Content? = null
+    @field:Json(name = "contents") val contents: List<Content>,
+    @field:Json(name = "generationConfig") val generationConfig: GenerationConfig? = null,
+    @field:Json(name = "systemInstruction") val systemInstruction: Content? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class Candidate(
-    @Json(name = "content") val content: Content
+    @field:Json(name = "content") val content: Content
 )
 
 @JsonClass(generateAdapter = true)
 data class GeminiResponse(
-    @Json(name = "candidates") val candidates: List<Candidate>? = null
+    @field:Json(name = "candidates") val candidates: List<Candidate>? = null
 )
 
 // --- Domain schema representation for parsing the generated MCQs ---
 
 @JsonClass(generateAdapter = true)
 data class GeneratedMcq(
-    @Json(name = "question") val question: String,
-    @Json(name = "optionA") val optionA: String,
-    @Json(name = "optionB") val optionB: String,
-    @Json(name = "optionC") val optionC: String,
-    @Json(name = "optionD") val optionD: String,
-    @Json(name = "correctAnswer") val correctAnswer: String // MUST be "A", "B", "C", or "D"
+    @field:Json(name = "question") val question: String,
+    @field:Json(name = "optionA") val optionA: String,
+    @field:Json(name = "optionB") val optionB: String,
+    @field:Json(name = "optionC") val optionC: String,
+    @field:Json(name = "optionD") val optionD: String,
+    @field:Json(name = "correctAnswer") val correctAnswer: String // MUST be "A", "B", "C", or "D"
 )
 
 @JsonClass(generateAdapter = true)
 data class GeneratedMcqList(
-    @Json(name = "questions") val questions: List<GeneratedMcq>
+    @field:Json(name = "questions") val questions: List<GeneratedMcq>
 )
 
 // --- Retrofit API Service ---

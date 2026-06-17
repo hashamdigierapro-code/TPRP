@@ -320,7 +320,20 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
         val difficulty = _uiState.value.selectedDifficulty
 
         viewModelScope.launch {
-            val questions = repository.quizDao.getQuestionsForQuiz(subject, difficulty)
+            // First try strict match
+            var questions = repository.quizDao.getQuestionsForQuiz(subject, difficulty)
+            
+            // If less than 10 questions, just try fetching by subject
+            if (questions.size < 10) {
+                val allSubjectQ = repository.quizDao.getAllQuestionsForSubject(subject)
+                questions = allSubjectQ
+            }
+
+            // If still empty (e.g. they picked a totally empty subject), fetch ALL
+            if (questions.isEmpty()) {
+                questions = repository.quizDao.getAllActiveQuestionsList()
+            }
+
             if (questions.isEmpty()) {
                 _uiState.update {
                     it.copy(
@@ -330,9 +343,10 @@ class QuizViewModel(application: Application) : AndroidViewModel(application) {
                 return@launch
             }
 
-            // Shuffle questions to ensure dynamic gameplay
-            val shuffled = questions.shuffled().take(10)
+            // Shuffle questions to ensure dynamic gameplay and take 100!
+            val shuffled = questions.shuffled().take(100)
             val idsStr = shuffled.map { it.id }.joinToString(",")
+
 
             val activeProfile = repository.userProfileDao.getActiveProfileDirect()
             if (activeProfile != null) {

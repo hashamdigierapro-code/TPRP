@@ -1084,13 +1084,14 @@ fun HomeScreen(viewModel: QuizViewModel, state: QuizUiState, isWideScreen: Boole
                                 }
                                 Spacer(modifier = Modifier.height(4.dp))
                                 LinearProgressIndicator(
-                                    progress = xpProgressPercent,
+                                    progress = { xpProgressPercent },
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(6.dp)
                                         .clip(RoundedCornerShape(3.dp)),
                                     color = MaterialTheme.colorScheme.primary,
-                                    trackColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+                                    trackColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
+                                    strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
                                 )
                             }
                             
@@ -3289,7 +3290,7 @@ fun StartOfAppProfilePrompt(
                                         )
                                     }
                                     Icon(
-                                        imageVector = Icons.Default.ArrowForwardIos,
+                                        imageVector = Icons.Default.ArrowForward,
                                         contentDescription = "Select",
                                         tint = Color(0xFFFFC107).copy(alpha = 0.8f),
                                         modifier = Modifier.size(14.dp)

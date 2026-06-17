@@ -261,7 +261,7 @@ class QuizRepository(private val database: QuizDatabase) {
 
     // Populate initial items for quizzes
     private fun generateDefaultQuestions(): List<QuizQuestion> {
-        return listOf(
+        val defaultList = listOf(
             // --- GENERAL KNOWLEDGE ---
             QuizQuestion(
                 subject = "General Knowledge",
@@ -569,5 +569,124 @@ class QuizRepository(private val database: QuizDatabase) {
                 correctAnswer = "A"
             )
         )
+        
+        val moreQuestions = mutableListOf<QuizQuestion>()
+        moreQuestions.addAll(defaultList)
+        
+        // Add 30 Random Math Questions
+        val mathRandom = kotlin.random.Random(42)
+        for(i in 1..30) {
+            val a = mathRandom.nextInt(1, 100)
+            val b = mathRandom.nextInt(1, 100)
+            val isAdd = mathRandom.nextBoolean()
+            val op = if (isAdd) "+" else "-"
+            val ans = if (isAdd) (a + b) else (a - b)
+            val wr1 = ans + mathRandom.nextInt(1, 10)
+            val wr2 = ans - mathRandom.nextInt(1, 10)
+            val wr3 = ans + mathRandom.nextInt(11, 20)
+            
+            // Randomly place correct answer
+            val slots = mutableListOf(ans.toString(), wr1.toString(), wr2.toString(), wr3.toString())
+            slots.shuffle(mathRandom)
+            val correctIdx = slots.indexOf(ans.toString())
+            val correctChar = ('A' + correctIdx).toString()
+            
+            moreQuestions.add(
+                QuizQuestion(
+                    subject = "Math",
+                    difficulty = if (i > 20) "Hard" else if (i > 10) "Medium" else "Easy",
+                    questionText = "What is $a $op $b?",
+                    optionA = slots[0], optionB = slots[1], optionC = slots[2], optionD = slots[3],
+                    correctAnswer = correctChar
+                )
+            )
+        }
+        
+        // Add 20 Geography Questions
+        val geoPairs = listOf(
+            "France" to "Paris", "Germany" to "Berlin", "Japan" to "Tokyo", "Italy" to "Rome", "Spain" to "Madrid",
+            "Canada" to "Ottawa", "Australia" to "Canberra", "Brazil" to "Brasilia", "India" to "New Delhi", "China" to "Beijing",
+            "Russia" to "Moscow", "South Korea" to "Seoul", "Mexico" to "Mexico City", "Egypt" to "Cairo", "Turkey" to "Ankara",
+            "Argentina" to "Buenos Aires", "Saudi Arabia" to "Riyadh", "South Africa" to "Pretoria", "Sweden" to "Stockholm", "Norway" to "Oslo"
+        )
+        val dummyCities = listOf("New York", "Dubai", "Sydney", "Toronto", "Istanbul", "Shanghai", "Mumbai", "Los Angeles", "Barcelona", "Amsterdam")
+        
+        for ((idx, pair) in geoPairs.withIndex()) {
+            val country = pair.first
+            val city = pair.second
+            val options = mutableListOf(city, dummyCities[(idx) % dummyCities.size], dummyCities[(idx+1) % dummyCities.size], dummyCities[(idx+2) % dummyCities.size])
+            options.shuffle(mathRandom)
+            
+            val correctIdx = options.indexOf(city)
+            val correctChar = ('A' + correctIdx).toString()
+            
+            moreQuestions.add(
+                QuizQuestion(
+                    subject = "Geography",
+                    difficulty = if (idx > 10) "Medium" else "Easy",
+                    questionText = "What is the capital of $country?",
+                    optionA = options[0], optionB = options[1], optionC = options[2], optionD = options[3],
+                    correctAnswer = correctChar
+                )
+            )
+        }
+        
+        // Add 20 Science Questions
+        val elements = listOf(
+            "Oxygen" to "O", "Hydrogen" to "H", "Carbon" to "C", "Nitrogen" to "N", "Helium" to "He",
+            "Iron" to "Fe", "Gold" to "Au", "Silver" to "Ag", "Copper" to "Cu", "Sodium" to "Na",
+            "Calcium" to "Ca", "Potassium" to "K", "Magnesium" to "Mg", "Chlorine" to "Cl", "Sulfur" to "S",
+            "Zinc" to "Zn", "Lead" to "Pb", "Uranium" to "U", "Titanium" to "Ti", "Neon" to "Ne"
+        )
+        val dummySymbols = listOf("X", "Y", "Z", "A", "B", "M", "L", "D", "E", "W")
+        for ((idx, pair) in elements.withIndex()) {
+            val element = pair.first
+            val symbol = pair.second
+            
+            val options = mutableListOf(symbol, dummySymbols[(idx) % dummySymbols.size], dummySymbols[(idx+1) % dummySymbols.size], dummySymbols[(idx+2) % dummySymbols.size])
+            options.shuffle(mathRandom)
+            val correctIdx = options.indexOf(symbol)
+            val correctChar = ('A' + correctIdx).toString()
+            
+            moreQuestions.add(
+                QuizQuestion(
+                    subject = "Science",
+                    difficulty = "Medium",
+                    questionText = "What is the chemical symbol for $element?",
+                    optionA = options[0], optionB = options[1], optionC = options[2], optionD = options[3],
+                    correctAnswer = correctChar
+                )
+            )
+        }
+        
+        // Add 20 Computer Science Questions
+        val abbrevs = listOf(
+            "CPU" to "Central Processing Unit", "RAM" to "Random Access Memory", "ROM" to "Read Only Memory", "HTTP" to "Hypertext Transfer Protocol", "URL" to "Uniform Resource Locator",
+            "HTML" to "Hypertext Markup Language", "IP" to "Internet Protocol", "LAN" to "Local Area Network", "WAN" to "Wide Area Network", "PDF" to "Portable Document Format",
+            "USB" to "Universal Serial Bus", "GPU" to "Graphics Processing Unit", "SSD" to "Solid State Drive", "HDD" to "Hard Disk Drive", "GUI" to "Graphical User Interface",
+            "API" to "Application Programming Interface", "DNS" to "Domain Name System", "FTP" to "File Transfer Protocol", "SQL" to "Structured Query Language", "VPN" to "Virtual Private Network"
+        )
+        val dummyFull = listOf("Computer Personal Unit", "Random Align Method", "Read Out Memory", "Hyper Type Text", "Universal Remote Locator")
+        
+        for ((idx, pair) in abbrevs.withIndex()) {
+            val abbrev = pair.first
+            val full = pair.second
+            val options = mutableListOf(full, dummyFull[(idx) % dummyFull.size], dummyFull[(idx+1) % dummyFull.size], "Central Control Protocol")
+            options.shuffle(mathRandom)
+            val correctIdx = options.indexOf(full)
+            val correctChar = ('A' + correctIdx).toString()
+            
+            moreQuestions.add(
+                QuizQuestion(
+                    subject = "Computer Science",
+                    difficulty = "Hard",
+                    questionText = "What does $abbrev stand for?",
+                    optionA = options[0], optionB = options[1], optionC = options[2], optionD = options[3],
+                    correctAnswer = correctChar
+                )
+            )
+        }
+        
+        return moreQuestions
     }
 }
